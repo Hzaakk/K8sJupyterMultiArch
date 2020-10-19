@@ -1,0 +1,11 @@
+persistence:
+  enabled: true
+  storageClass: '-'
+  accessMode: ReadWriteMany
+  size: 100Mi
+
+storageClass:
+  defaultClass: true
+
+nodeSelector:
+  kubernetes.io/hostname: intel02

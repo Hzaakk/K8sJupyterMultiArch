@@ -1,0 +1,52 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: cronjob
+  namespace: jupyterapp
+  labels:
+    app: cronjob
+
+spec:
+  #concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: cronjob
+        spec:
+          serviceAccountName: jupyterapp-serviceaccount-delete
+          restartPolicy: Never
+          containers:
+            - name: cronjob
+              image: intel01:5000/cronjob-multiarch:latest
+              env:
+                - name: TIME_TO_LIVE
+                  value: "5"
+              resources:
+                requests:
+                  memory: 50M
+                  cpu: 50m
+                limits:
+                  memory: 150M
+                  cpu: 150m
+              volumeMounts:
+                - name: at-vol
+                  mountPath: /var/nfs/
+          volumes:
+            - name: at-vol
+              persistentVolumeClaim:
+                claimName: data-nfs-nfs-server-provisioner-0
+
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                    - key: arch
+                      operator: In
+                      values: [ "x86" ]

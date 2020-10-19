@@ -1,0 +1,31 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data-nfs-server-provisioner-0
+  namespace: jupyterapp
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /srv/volumes/data-nfs-server-provisioner-0
+  claimRef:
+    namespace: jupyterapp
+    name: data-nfs-nfs-server-provisioner-0
+
+#---
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: at-pvc
+#  namespace: jupyterapp
+#spec:
+#  storageClassName: nfs
+#  accessModes:
+#    - ReadWriteMany
+#  resources:
+#    requests:
+#      storage: 99Mi
+

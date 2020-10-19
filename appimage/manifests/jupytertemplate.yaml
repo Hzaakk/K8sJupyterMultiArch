@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ name }}
+  labels:
+    name: {{ name }}
+    app: jupyter
+
+spec:
+  restartPolicy: Never
+  containers:
+    - name: jupytercontainer
+      image: {{ image }}
+      imagePullPolicy: IfNotPresent
+      #args: [ "start-notebook.sh", "--no-browser" ]
+      env:
+        - name: JUPYTER_ENABLE_LAB
+          value: "yes"
+
+      resources:
+        requests:
+          memory: 50M
+          cpu: 200m
+        limits:
+          memory: 250M
+          cpu: 300m
+      #podBudget
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: arch
+              operator: In
+              values: [ {{ architecture }} ]
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ name }}-service
+  namespace: jupyterapp
+spec:
+  selector:
+    name: {{ name }}
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8888
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ name }}-ingress
+  namespace: jupyterapp
+spec:
+  tls:
+    - hosts:
+        - {{ name }}.192-168-1-105.sslip.io
+  rules:
+    - host: {{ name }}.192-168-1-105.sslip.io
+      http:
+        paths:
+          - backend:
+              service:
+                name: {{ name }}-service
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix

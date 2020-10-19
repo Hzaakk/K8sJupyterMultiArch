@@ -1,0 +1,12 @@
+FROM andresvidal/jupyter-armv7l
+
+USER root
+RUN pip install jupyterlab && \
+    mkdir /home/user && \
+    chown 1000:1000 /home/user && \
+    useradd user -u 1000 -d /home/user
+
+USER user
+WORKDIR /home/user
+
+ENTRYPOINT [ "jupyter", "lab", "--ip=*", "--no-browser" ]

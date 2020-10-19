@@ -1,0 +1,86 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jupyterapp-serviceaccount-create
+  namespace: jupyterapp
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jupyterapp-serviceaccount-delete
+  namespace: jupyterapp
+
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: jupyterapp-role-create
+  namespace: jupyterapp
+
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["create", "get", "list"]
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["create"]
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses"]
+    verbs: ["create"]
+
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: jupyterapp-role-delete
+  namespace: jupyterapp
+
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["delete"]
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["delete"]
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses"]
+    verbs: ["delete"]
+
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: jupyterapp-rolebinding-create
+  namespace: jupyterapp
+
+subjects:
+  - kind: ServiceAccount
+    name: jupyterapp-serviceaccount-create
+    namespace: jupyterapp
+
+roleRef:
+  kind: Role
+  name: jupyterapp-role-create
+  apiGroup: rbac.authorization.k8s.io
+
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: jupyterapp-rolebinding-delete
+  namespace: jupyterapp
+
+subjects:
+  - kind: ServiceAccount
+    name: jupyterapp-serviceaccount-delete
+    namespace: jupyterapp
+
+roleRef:
+  kind: Role
+  name: jupyterapp-role-delete
+  apiGroup: rbac.authorization.k8s.io

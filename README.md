@@ -5,4 +5,4 @@ Note: change the keys in initialmanifests/secret.yaml if you want actual securit
 
 Architecture is shown below
 
-![architecture](https://github.com/Hzaakk/K8sJupyterMultiArch/blob/master/jupyterapparchitecture.png?raw=true)
+![architecture](jupyterapparchitecture.png)

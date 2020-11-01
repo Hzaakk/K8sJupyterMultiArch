@@ -1,14 +1,11 @@
 #!/bin/bash
 kubectl delete -f manifests/ &
-kubectl get pods -n jupyterapp -o name | grep -E '^pod/jp[a-z]{8}' | while read line; do
-	line=${line#*/}
-	line=${line%-deployment*}
-	kubectl delete pod/$line \
-		       ingress.networking.k8s.io/$line-ingress \
-		       service/$line-service &
+for i in service ingress pod; do
+        kubectl get $i -n jupyterapp -o name | grep -E '^.*?/jpr[a-z]{8}' | while read line; do
+                kubectl delete $line &
+        done
 done
 
 kubectl get pods -n jupyterapp -o name | grep -E '^pod/cronjob-' | while read line; do
-	kubectl delete $line &
+        kubectl delete $line &
 done
-	

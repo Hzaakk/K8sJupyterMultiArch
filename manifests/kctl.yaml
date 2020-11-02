@@ -45,14 +45,8 @@ spec:
             #preStop:
             #  exec:
             #    command: [ "kubectl", "delete", "-f", "/var/nfs/inuse" ]
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                - key: arch
-                  operator: In
-                  values: [ "x86" ]
+      nodeSelector:
+        arch: x86
 
 ---
 apiVersion: v1

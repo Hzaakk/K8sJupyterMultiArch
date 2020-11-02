@@ -42,11 +42,5 @@ spec:
               persistentVolumeClaim:
                 claimName: jupyter-pvc
 
-          affinity:
-            nodeAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                nodeSelectorTerms:
-                  - matchExpressions:
-                    - key: arch
-                      operator: In
-                      values: [ "x86" ]
+          nodeSelector:
+            arch: x86

@@ -26,14 +26,8 @@ spec:
           cpu: 300m
       #podBudget
 
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-            - key: arch
-              operator: In
-              values: [ {{ architecture }} ]
+  nodeSelector:
+    arch: {{ architecture }}
 
 ---
 apiVersion: v1

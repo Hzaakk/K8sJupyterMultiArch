@@ -24,7 +24,7 @@ spec:
       volumes:
         - name: at-vol
           persistentVolumeClaim:
-            claimName: data-nfs-nfs-server-provisioner-0
+            claimName: jupyter-pvc
       containers:
         - image: intel01:5000/kctlapp-multiarch:latest
           name: kctlapp

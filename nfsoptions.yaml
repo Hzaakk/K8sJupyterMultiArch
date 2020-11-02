@@ -8,4 +8,9 @@ storageClass:
   defaultClass: true
 
 nodeSelector:
-  kubernetes.io/hostname: intel02
+  kubernetes.io/hostname: intel01
+
+tolerations:
+  - key: node-role.kubernetes.io/master
+    operator: Exists
+    effect: NoSchedule

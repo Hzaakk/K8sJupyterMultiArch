@@ -15,17 +15,16 @@ spec:
     namespace: jupyterapp
     name: data-nfs-nfs-server-provisioner-0
 
-#---
-#apiVersion: v1
-#kind: PersistentVolumeClaim
-#metadata:
-#  name: at-pvc
-#  namespace: jupyterapp
-#spec:
-#  storageClassName: nfs
-#  accessModes:
-#    - ReadWriteMany
-#  resources:
-#    requests:
-#      storage: 99Mi
-
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jupyter-pvc
+  namespace: jupyterapp
+spec:
+  storageClassName: nfs
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 99Mi
